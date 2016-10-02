@@ -2,10 +2,13 @@
 set -eo pipefail
 
 # verify variables
-if [ -z "$S3_ACCESS_KEY" -o -z "$S3_SECRET_KEY" -o -z "$S3_URL" ]; then
-	echo >&2 'Backup information is not complete. You need to specify S3_ACCESS_KEY, S3_SECRET_KEY, S3_URL. No backups, no fun.'
+if [ -z "$S3_ACCESS_KEY" -o -z "$S3_SECRET_KEY" -o -z "$S3_URL" -o -z "$ELASTICSEARCH_URL" ]; then
+	echo >&2 'Backup information is not complete. You need to specify S3_ACCESS_KEY, S3_SECRET_KEY, S3_URL, ELASTICSEARCH_URL. No backups, no fun.'
 	exit 1
 fi
+
+SNAPSHOT_VOLUME=${SNAPSHOT_VOLUME-"/var/backup/elasticsearch"}
+
 
 # set s3 config
 sed -i "s/%%S3_ACCESS_KEY%%/$S3_ACCESS_KEY/g" /root/.s3cfg
@@ -19,7 +22,7 @@ s3cmd ls "s3://$S3_URL" > /dev/null
    echo "CRON_SCHEDULE set to default ('$CRON_SCHEDULE')"
 
 # add a cron job
-echo "$CRON_SCHEDULE root s3cmd sync /usr/share/elasticsearch/data s3://$S3_URL/" >> /etc/crontab
+echo "$CRON_SCHEDULE root /snapshotter.sh && s3cmd sync ${SNAPSHOT_VOLUME} s3://$S3_URL/" >> /etc/crontab
 crontab /etc/crontab
 
 exec "$@"
