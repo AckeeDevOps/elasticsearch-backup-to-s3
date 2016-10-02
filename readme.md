@@ -13,6 +13,7 @@ Following ENV variables must be specified:
     CRON_SCHEDULE cron schedule string, default '0 2 * * *'
 
 Examples:
+
 1) Run docker container with elasticsearch:
 			docker run --name elasticsearch -v /var/backup/elasticsearch -p 9200:9200 -d elasticsearch -Des.path.repo=/var/backup/elasticsearch
 2) And then run your elasticsearch-backup-to-s3 container:
