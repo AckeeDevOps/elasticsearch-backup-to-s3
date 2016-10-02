@@ -4,6 +4,7 @@ set -eo pipefail
 
 #dependencies: curl
 
+#example of running docker container with elasticsearch
 #docker run --name elasticsearch -v /var/backup/elasticsearch -p 9200:9200 -d elasticsearch -Des.path.repo=/var/backup/elasticsearch
 
 SNAPSHOT_VOLUME=$1
@@ -30,7 +31,7 @@ mkdir -p "${SNAPSHOT_VOLUME}/${SNAPSHOT_REPOSITORY_NAME}"
 chmod -R 777 "${SNAPSHOT_VOLUME}/${SNAPSHOT_REPOSITORY_NAME}"
 
 
-#if snapshot repository don't exist, create it
+#if snapshot repository don't exists, create it
 result="$(curl "http://${ELASTICSEARCH_URL}/_snapshot/")"
 if [[ -z "$(echo "result" | grep "$SNAPSHOT_REPOSITORY_NAME")" ]]; then
 	curl -XPUT "http://${ELASTICSEARCH_URL}/_snapshot/${SNAPSHOT_REPOSITORY_NAME}?pretty" -d "
