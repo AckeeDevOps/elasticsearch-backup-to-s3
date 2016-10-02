@@ -15,6 +15,6 @@ Following ENV variables must be specified:
 Examples:
 
 1) Run docker container with elasticsearch:
-			docker run --name elasticsearch -v /var/backup/elasticsearch -p 9200:9200 -d elasticsearch -Des.path.repo=/var/backup/elasticsearch
+	docker run --name elasticsearch -v /var/backup/elasticsearch -p 9200:9200 -d elasticsearch -Des.path.repo=/var/backup/elasticsearch
 2) And then run your elasticsearch-backup-to-s3 container:
-			docker run --link elasticsearch:elasticsearch -e ELASTICSEARCH_URL="elasticsearch:9200" -e SNAPSHOT_VOLUME="/var/backup/elasticsearch" -e S3_URL="your S3 url" -e S3_ACCESS_KEY="your S3 access key" -e S3_SECRET_KEY="your S3 secret key"
+	docker run --link elasticsearch:elasticsearch -e ELASTICSEARCH_URL="elasticsearch:9200" -e SNAPSHOT_VOLUME="/var/backup/elasticsearch" -e S3_URL="your S3 url" -e S3_ACCESS_KEY="your S3 access key" -e S3_SECRET_KEY="your S3 secret key"
